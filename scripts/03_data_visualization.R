@@ -1,6 +1,7 @@
 # ==============================================================================
 # Script 03: Academic Data Visualization
 # ==============================================================================
+setwd("/Users/zhaozhao/Nutstore Files/.symlinks/坚果云/Quanti_metagenomic_data/Pathogen_Inactivtation_XGBoost/")
 rm(list = ls())
 
 library(tidyverse)
@@ -8,6 +9,8 @@ library(readxl)
 library(ggpubr)
 library(xgboost)
 library(extrafont)
+library(grid)
+library(rstatix)
 
 
 if(!("Arial" %in% fonts())) {
@@ -107,14 +110,42 @@ cat("[4/4] Generating Absolute Error Diagnosis Boxplot...\n")
 error_df <- plot_df %>% mutate(Abs_Error = abs(Predicted_LRV - LRV))
 summary_df <- error_df %>% group_by(Disinfection_Type) %>% summarize(MAE = mean(Abs_Error)) %>% arrange(MAE)
 error_df$Disinfection_Type <- factor(error_df$Disinfection_Type, levels = summary_df$Disinfection_Type)
+kruskal_test <- kruskal_test(Predicted_LRV ~ Disinfection_Type, data = error_df)
+print(kruskal_test)
+
+# 如果整体有显著性差异，进行两两比较
+if (kruskal_test$p < 0.05) {
+  cat("\nPairwise Wilcoxon test with BH adjustment:\n")
+  pairwise_wilcox <- error_df %>%
+    pairwise_wilcox_test(Predicted_LRV ~ Disinfection_Type, p.adjust.method = "BH")
+  print(pairwise_wilcox)
+  
+  # 保存显著性结果
+  write.csv(pairwise_wilcox, "去除率/ALLpathogens_pairwise_wilcox_test.csv", row.names = FALSE)
+}
+
+# 计算y轴的最大值，用于确定显著性标记的位置
+y_max <- max(error_df$Predicted_LRV, na.rm = TRUE)
+
+# 为每个比较组设置合适的y位置
+pairwise_wilcox <- pairwise_wilcox %>%
+  mutate(y.position = y_max + (1:nrow(pairwise_wilcox)) * 0.08)
 
 p_error <- ggplot(error_df, aes(x = Disinfection_Type, y = Abs_Error, fill = Disinfection_Type)) +
   geom_boxplot(alpha = 0.8, outlier.shape = NA, color = "black", linewidth = 0.8) +
   geom_jitter(width = 0.15, alpha = 0.6, size = 2.5, color = "grey20", stroke = 0.5) +
+  # 添加显著性标记
+  stat_pvalue_manual(pairwise_wilcox, 
+                     label = "p.adj.signif", 
+                     tip.length = 0.01,
+                     bracket.size = 0.8,
+                     label.size = 5,
+                     bracket.nudge.y = 0.1) +
   geom_text(data = summary_df, aes(x = Disinfection_Type, y = max(error_df$Abs_Error) * 1.08, label = sprintf("MAE\n%.2f", MAE)), size = 4.5, fontface = "bold", family = "Arial", color = "black", inherit.aes = FALSE) +
   scale_fill_manual(values = my_colors) + theme_bw() + theme(text = element_text(family = "Arial", face = "bold"), axis.title = element_text(size = 14), axis.text = element_text(size = 12), axis.text.x = element_text(angle = 0, hjust = 0.5, size = 13), panel.border = element_rect(color = "black", fill = NA, linewidth = 1.2), legend.position = "none") +
   labs(x = "Disinfection Process (Arranged by Error Margin)", y = "Absolute Prediction Error (Log units)") + scale_y_continuous(expand = expansion(mult = c(0.05, 0.15)))
 
-ggsave("results/figures/Absolute_Error_Diagnosis.pdf", plot = p_error, width = 8, height = 6, dpi = 300)
+p_error
+ggsave("results/figures/Absolute_Error_Diagnosis-0414.pdf", plot = p_error, width = 8, height = 8, dpi = 300)
 
 cat("\n✅ All visualizations successfully generated in 'results/figures/'!\n")
