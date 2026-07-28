@@ -1,0 +1,10 @@
+Model,Feature_Category,Total_Gain,Contribution_Pct
+Full model (243),Disinfection Context (Process Type),0.13413272543978302,13.413272543978302
+Full model (243),Genetic Damage (Delta Pi),0.11187323528859566,11.187323528859567
+Full model (243),Genetic Damage (Delta SNV Density),0.12894448883826298,12.894448883826298
+Full model (243),Initial State (Breadth Inf),0.06351414630557431,6.351414630557431
+Full model (243),Physical Damage (Delta Breadth),0.561535404127784,56.153540412778405
+Reduced model (430),Disinfection Context (Process Type),0.15053037969243632,15.053037969243634
+Reduced model (430),Genetic Damage (Delta SNV Density),0.19283197566110824,19.283197566110825
+Reduced model (430),Initial State (Breadth Inf),0.15179159995750505,15.179159995750508
+Reduced model (430),Physical Damage (Delta Breadth),0.5048460446889503,50.48460446889504

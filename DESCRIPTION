@@ -1,0 +1,29 @@
+Package: PathogenInactivationXGBoost
+Type: Project
+Title: Cross-Species XGBoost Prediction of DNA-Based Genomic Removal
+Version: 2.0.0
+Authors@R: person(
+    "Yanmei", "Zhao",
+    email = "zym20210221hiter@163.com",
+    role = c("aut", "cre")
+  )
+Description: Reproducible training, internal validation, blind testing,
+    interpretation, and visualization of cross-species XGBoost models for
+    pathogen-associated genomic log-removal values in wastewater treatment.
+License: All rights reserved
+Encoding: UTF-8
+Depends:
+    R (>= 4.3.0)
+Imports:
+    dplyr,
+    ggbeeswarm,
+    ggplot2,
+    purrr,
+    ragg,
+    readr,
+    readxl,
+    stringr,
+    svglite,
+    systemfonts,
+    tidyr,
+    xgboost

@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated manuscript and this repository."
+title: "Cross-species XGBoost prediction of DNA-based genomic removal"
+type: software
+version: 2.0.0
+authors:
+  - family-names: Zhao
+    given-names: Yanmei
+repository-code: "https://github.com/emmazhao0219-cyber/Pathogen_Inactivation_XGBoost"
+url: "https://github.com/emmazhao0219-cyber/Pathogen_Inactivation_XGBoost"
+date-released: 2026-07-28
+

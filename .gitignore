@@ -1,6 +1,22 @@
 .Rhistory
 .RData
 .Ruserdata
+.Rproj.user/
 .DS_Store
+Thumbs.db
+
+# Temporary and editor files
+*.tmp
+*.swp
+*~
+~$*
+
+# Large primary sequencing files are not part of this repository
 *.fastq
-*.gz
+*.fastq.gz
+*.fq
+*.fq.gz
+
+# Optional high-resolution exports generated locally
+results/figures/*.tiff
+results/figures/*.tif
