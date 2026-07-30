@@ -49,8 +49,6 @@ not supplied to the XGBoost model.
 │   ├── 06_si_internal_validation_material.R
 │   └── model_utils.R
 ├── DATA_DICTIONARY.md
-├── RESULTS_SUMMARY.md
-├── RESULTS_SUMMARY_中文.md
 └── run_all.R
 ```
 
